@@ -1,27 +1,19 @@
 type User {
   id: ID! @id
-  github: Account @relation(name: "GithubAccount")
-  google: Account @relation(name: "GoogleAccount")
-  name: String!
-  alias: String!
+  openId: String! @unique
+  token: String
+  userType: UserType!
+  email: String!
+  name: String
+  alias: String
   profileImg: String
   initialLetter: String
   isHeavyUser: Boolean! @default(value: false)
-  level: levelType!
+  level: levelType! 
   posts: [Post!]! @relation(name: "PostOnwer")
   comments: [Comment!]! @relation(name: "CommentAuthor", onDelete: CASCADE)
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
-}
-
-type Account {
-  id: ID! @id
-  openId: String! @unique
-  token: String!
-  userType: UserType!
-  email: String! @unique
-  githubUser: User @relation(name: "GithubAccount", link: INLINE)
-  googleUser: User @relation(name: "GoogleAccount", link: INLINE)
 }
 
 type Post {

@@ -1,7 +1,7 @@
 type User {
   id: ID!
-  name: String!
-  alias: String!
+  name: String
+  alias: String
   profileImg: String
   initialLetter: String
   isHeavyUser: Boolean!

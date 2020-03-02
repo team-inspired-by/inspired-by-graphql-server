@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { authenticateGithub, authenticateGoogle } = require('../../passport');
+const { generateToken } = require('../../utils/auth');
+const utils = require('../../utils');
 require('dotenv').config();
 
 module.exports =  {
@@ -63,32 +65,48 @@ module.exports =  {
       });
       return { token: access_token };
     },
-    authGoogle: async(root, { input: { accessToken }}, { req, res }) => {
+    authGoogle: async(root, { input: { accessToken }}, { req, res, prisma }, info) => {
+      console.log(req.body);
       req.body = {
         ...req.body,
         access_token: accessToken
       };
       try{
-        const { data, info } = await authenticateGoogle(req, res);
+        const { data, resultInfo } = await authenticateGoogle(req, res);
         if (data) {
-          console.log(data);
+          // console.log(data);
+          const { accessToken, refreshToken, profile } = data;
+          let user = await prisma.query.user({
+            where: {
+              openId: profile.id
+            }
+          });
+          if(!user){
+            user = await prisma.mutation.createUser({
+              data: {
+                name: profile.displayName || `${profile.familyName} ${profile.givenName}`,
+                level: 'MEMBER',
+                profileImg: profile._json.picture,
+                openId: profile.id,
+                userType: 'GOOGLE',
+                token: accessToken,
+                email: profile.emails[0].value,
+              }
+            });
+          };
+          const token = await generateToken(user.id);
+          return({
+            token: token,
+            user: user
+          });
 
-          // const user = await User.upsertGoogleUser(data);
-          // if (user) {
-          //   const token = await user.generateJWT(user);
-          //   return ({
-          //     token: token,
-          //     user: user,
-          //   });
-          // };
-
+        };
+        if (resultInfo) {
+          return resultInfo;
         }
-        if (info) {
-          console.log(info);
-        }
-        return (Error('server error'));
       }catch(err) {
         console.error(err);
+        return err;
       }
 
     },
