@@ -1,0 +1,41 @@
+scalar DateTime
+type Post{
+  id: ID!
+  category: Category!
+  coverImg: String
+  author: User!
+  # contributor: [Contributor!]!
+  contents: String!
+  topics: [Topic!]!
+  comments: [Comment]
+  summary: [String]
+  numViews: Int!
+  numLikes: Int!
+  numComments: Int!
+  isPrivate: Boolean!
+  publishedAt: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+enum Category {
+  GENERAL,
+  GIT,
+  BOOK
+}
+enum ContributorType {
+  TYPO
+  INFO_CORRECTION
+  INFO_ADDTION
+}
+type Query{
+  posts: [Post!]!
+  post(id: ID!): Post
+  getCommentsCount(postId: ID!): Int
+}
+# type Mutation {
+#   # createPost(input: postInput, userId: ID!): Post
+#   # updatePost(id: ID!, input: postInput): Post
+#   # deletePost(id: ID!): Post
+#   # incrementLike(id: ID!): Post
+#   # decrementLike(id: ID!): Post
+# }

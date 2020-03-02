@@ -1,0 +1,161 @@
+type User {
+  id: ID! @id
+  social: [Social!]! @relation(name: "SocialUser", onDelete: SET_NULL)
+  name: String!
+  alias: String!
+  profileImg: String
+  initialLetter: String
+  isHeavyUser: Boolean! @default(value: false)
+  level: levelType!
+  posts: [Post!]! @relation(name: "PostOnwer")
+  comments: [Comment!]! @relation(name: "CommentAuthor", onDelete: CASCADE)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type Social {
+  id: ID! @id
+  openId: String! @unique
+  token: String!
+  userType: UserType!
+  email: String! @unique
+  user: User! @relation(name: "SocialUser", onDelete: CASCADE)
+}
+
+type Post {
+  id: ID! @id
+  category: Category! @default(value: GENERAL)
+  coverImg: String
+  owner: User! @relation(name: "PostOnwer", onDelete:SET_NULL)
+  topics: [Topic!]! @relation(name: "PostTopic")
+  comments: [Comment!]! @relation(name: "Comments", onDelete: CASCADE)
+  gitPosts: GitPost! @relation(name: "GitPostToPost", onDelete: CASCADE, link: INLINE)
+  bookPosts: BookPost! @relation(name: "BookPostToPost", onDelete: CASCADE, link: INLINE)
+  series: Series @relation(name: "SeriesPosts")
+  contents: String!
+  keywords: [String] @scalarList(strategy: RELATION) 
+  summary: [String] @scalarList(strategy: RELATION)
+  numViews: Int! @default(value: 0)
+  numLikes: Int! @default(value: 0)
+  numComments: Int! @default(value: 0)
+  isPrivate: Boolean! @default(value: true)
+  publishedAt: DateTime @publishedAt
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type GitPost {
+  id: ID! @id
+  post: Post! @relation(name: "GitPostToPost", onDelete: CASCADE)
+  gitId: String!
+  gitAuthor: [String]! @scalarList(strategy: RELATION)
+  gitTitle: String!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type BookPost {
+  id: ID! @id
+  post: Post! @relation(name: "BookPostToPost", onDelete: CASCADE)
+  bookName: String!
+  bookPublisher: String!
+  LinkedStore: [LinkedStore] @scalarList(strategy: RELATION)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type Contributor {
+  id: ID! @id
+  user: User!
+  type: [ContributorType!]! @scalarList(strategy: RELATION)
+  contributedAt: DateTime! @contributedAt
+  correctionRange: String
+}
+
+type Series {
+  id: ID! @id
+  name: String!
+  posts: [Post] @relation(name: "SeriesPosts", onDelete: CASCADE)
+  description: String!
+  numViews: Int! @default(value: 0)
+  numLikes: Int! @default(value: 0)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type Comment {
+  id: ID! @id
+  post: Post! @relation(name:"Comments", onDelete: SET_NULL)
+  author: User! @relation(name:"CommentAuthor", onDelete: SET_NULL)
+  contents: String!
+  replies: [Comment] @relation(name: "Replies")
+  likes: Int! @default(value: 0)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+type Topic {
+  id: ID! @id
+  name: String!
+  posts: [Post] @relation(name: "PostTopic", onDelete: CASCADE)
+  events: [Event] @relation(name: "TopicEvents", onDelete: CASCADE)
+  coverImg: String
+  coverDescription: String
+  numViews: Int! @default(value: 0)
+  backImg: String
+  icon: String
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type Event {
+  id: ID! @id
+  name: String!
+  topic: Topic! @relation(name: "TopicEvents", onDelete: SET_NULL)
+  description: String!
+  mainImg: String
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type File { 
+  id: ID! @id
+  author: User!
+  alias: String!
+  type: [FileType] @scalarList(strategy: RELATION)
+  size: String!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+enum Category {
+  GENERAL
+  GIT
+  BOOK
+}
+enum UserType {
+  GITHUB
+  GOOGLE
+}
+
+enum levelType {
+  VISITOR
+  MEMBER
+  WRITER
+  MANAGER
+}
+enum LinkedStore {
+  YES24
+  KYOBO
+}
+enum ContributorType {
+  TYPO
+  INFO_CORRECTION
+  INFO_ADDTION
+}
+enum FileType {
+  IMAGE
+  PDF
+  ETC
+}
+
+

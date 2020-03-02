@@ -1,0 +1,12 @@
+#endpoint: ''
+# endpoint에 service name 과 stage가 포함
+# service name inspiredBy, stage dev
+endpoint: http://localhost:4466/inspiredby/dev
+datamodel: datamodel.prisma
+
+# generate: 
+#   - generator: javascript-client
+#     output: ../src/generated/prisma-client
+# hooks:
+#   post-deploy:
+#     - prisma generate

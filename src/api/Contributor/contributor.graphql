@@ -1,0 +1,12 @@
+type Contributor{
+  user: User!
+  contributorType: ContributorType!
+  contributedAt: DateTime!
+  correctionRange: String
+}
+
+enum ContributorType {
+  TYPO
+  INFO_CORRECTION
+  INFO_ADDTION
+}

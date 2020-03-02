@@ -1,0 +1,59 @@
+type User {
+  id: ID!
+  alias: String!
+  profileImg: String
+  initialLetter: String
+  isHeavyUser: Boolean!
+  level: [levelType]
+  social: [Social!]!
+  posts: [Post!]!
+  comments: [Comment!]!
+}
+type Social {
+  id: ID!
+  openId: String
+  token: String!
+  userType: UserType!
+  email: String!
+  user: User!
+}
+
+enum UserType{
+  GITHUB,
+  GOOGLE,
+}
+
+enum levelType{
+  VISITOR,
+  MEMBER,
+  WRITER,
+  MANAGER
+}
+type Query {
+  """ openId값이 일치하는(옵션) 유저의 전체 정보 요청"""
+  users(query: String): [User!]!
+  user(id: ID!): User
+  githubLoginUrl: String
+  test: String
+}
+
+
+type AuthToken {
+  token: String!
+}
+type AuthResponse {
+  token: String
+  user: User!
+}
+input AuthInput {
+  accessToken: String!
+}
+type Mutation {
+  createUser(query: String!): User
+  # updateUser(id: ID!, input: UserInput): User
+  deleteUser(id: ID!): User
+  githubAccessToken(code: String!): AuthToken!
+  authGithub(input: AuthInput!): AuthResponse
+  authGoogle(input: AuthInput!): AuthResponse
+    
+}
