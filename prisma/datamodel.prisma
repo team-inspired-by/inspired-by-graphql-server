@@ -1,6 +1,7 @@
 type User {
   id: ID! @id
-  social: [Social!]! @relation(name: "SocialUser", onDelete: SET_NULL)
+  github: Account @relation(name: "GithubAccount")
+  google: Account @relation(name: "GoogleAccount")
   name: String!
   alias: String!
   profileImg: String
@@ -13,13 +14,14 @@ type User {
   updatedAt: DateTime! @updatedAt
 }
 
-type Social {
+type Account {
   id: ID! @id
   openId: String! @unique
   token: String!
   userType: UserType!
   email: String! @unique
-  user: User! @relation(name: "SocialUser", onDelete: CASCADE)
+  githubUser: User @relation(name: "GithubAccount", link: INLINE)
+  googleUser: User @relation(name: "GoogleAccount", link: INLINE)
 }
 
 type Post {

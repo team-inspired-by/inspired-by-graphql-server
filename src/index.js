@@ -1,13 +1,9 @@
-// const { GraphQLServer, PubSub } = require('graphql-yoga');
-const { ApolloServer, PubSub, AuthenticationError } = require('apollo-server')
-const schema = require('./schema');
+const { ApolloServer, PubSub, AuthenticationError } = require('apollo-server');
 const prisma = require('./prisma'); 
-// const { resolvers, fragmentReplacements } = require('./resolvers/index')
+const { extractFragmentReplacements } = require('prisma-binding');
 const { typeDefs, resolvers } = require('./schema');
-
-// const pubsub = new PubSub();
-// typeDefs: './src/schema.graphql',
-//   resolvers,
+const fragmentReplacements = extractFragmentReplacements(resolvers);
+const pubsub = new PubSub();
 const port = process.env.PORT || 4000;
 
 const server = new ApolloServer({

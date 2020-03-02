@@ -5,10 +5,16 @@ require('dotenv').config();
 module.exports =  {
   Query: {
     async users(parent, args, { prisma }, info) {
-      const opArgs = {}
-      if (args.query) {
-        opArgs.social = {
-          openId: args.query
+      const opArgs = {};
+      const data = args.SocialUserInput;
+
+      if (args.SocialUserInput) {
+        opArgs.where = {
+          AND: [{
+            openId: data.openId
+          },{
+            userType: data.userType
+          }]
         }
       };
       
@@ -39,7 +45,7 @@ module.exports =  {
 
   },
   Mutation: {
-    async createUser(root, { input }){
+    async createUser(root, args, { prisma }, info){
       
       
       return await User.create(input);
@@ -57,7 +63,6 @@ module.exports =  {
       });
       return { token: access_token };
     },
-
     authGoogle: async(root, { input: { accessToken }}, { req, res }) => {
       req.body = {
         ...req.body,
@@ -66,14 +71,17 @@ module.exports =  {
       try{
         const { data, info } = await authenticateGoogle(req, res);
         if (data) {
-          const user = await User.upsertGoogleUser(data);
-          if (user) {
-            const token = await user.generateJWT(user);
-            return ({
-              token: token,
-              user: user,
-            });
-          }
+          console.log(data);
+
+          // const user = await User.upsertGoogleUser(data);
+          // if (user) {
+          //   const token = await user.generateJWT(user);
+          //   return ({
+          //     token: token,
+          //     user: user,
+          //   });
+          // };
+
         }
         if (info) {
           console.log(info);
