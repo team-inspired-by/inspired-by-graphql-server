@@ -1,24 +1,17 @@
 type User {
   id: ID!
+  openId: String
+  token: String!
+  userType: UserType!
+  email: String!
   name: String
   alias: String
   profileImg: String
   initialLetter: String
   isHeavyUser: Boolean!
   level: [levelType]
-  github: Account 
-  google: Account 
   posts: [Post!]!
   comments: [Comment!]!
-}
-type Account {
-  id: ID!
-  openId: String
-  token: String!
-  userType: UserType!
-  email: String!
-  githubUser: User
-  googleUser: User
 }
 enum UserType{
   GITHUB,

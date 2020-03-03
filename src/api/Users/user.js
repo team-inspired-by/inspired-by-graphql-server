@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { authenticateGithub, authenticateGoogle } = require('../../passport');
+const { requestGithubToken } = require('../../lib');
 const { generateToken } = require('../../utils/auth');
 const utils = require('../../utils');
 require('dotenv').config();
@@ -66,7 +67,6 @@ module.exports =  {
       return { token: access_token };
     },
     authGoogle: async(root, { input: { accessToken }}, { req, res, prisma }, info) => {
-      console.log(req.body);
       req.body = {
         ...req.body,
         access_token: accessToken
@@ -74,7 +74,6 @@ module.exports =  {
       try{
         const { data, resultInfo } = await authenticateGoogle(req, res);
         if (data) {
-          // console.log(data);
           const { accessToken, refreshToken, profile } = data;
           let user = await prisma.query.user({
             where: {
@@ -108,32 +107,48 @@ module.exports =  {
         console.error(err);
         return err;
       }
-
     },
-    authGithub: async(root, { input: { accessToken }}, { req, res }) => {
+    authGithub: async(root, { input: { accessToken }}, { req, res, prisma }, info) => {
       req.body = {
         ...req.body,
         access_token: accessToken
       };
       try{
-        const { data, info } = await authenticateGithub(req, res);
+        const { data, resultInfo } = await authenticateGithub(req, res);
         if (data) {
-          const user = await User.upsertGithubUser(data);
-          if (user) {
-            const token = await user.generateJWT(user);
-            return ({
-              token: token,
-              user: user,
+          const { accessToken, refreshToken, profile } = data;
+          let user = await prisma.query.user({
+            where: {
+              openId: profile.id.toString()
+            }
+          });
+          if(!user){
+            user = await prisma.mutation.createUser({
+              data: {
+                name: profile.displayName,
+                alias: profile.username,
+                level: 'MEMBER',
+                profileImg: profile._json.avatar_url,
+                openId: profile.id.toString(),
+                userType: 'GITHUB',
+                token: accessToken,
+                email: profile.emails[0].value,
+              }
             });
-          }
-        }
+          };
+          const token = await generateToken(user.id);
+          return({
+            token: token,
+            user: user
+          });
 
-        if (info) {
-          console.log(info);
+        };
+        if (resultInfo) {
+          return resultInfo;
         }
-        return (Error('server error'));
       }catch(err) {
         console.error(err);
+        return err;
       }
     },
 
