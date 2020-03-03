@@ -16,6 +16,7 @@ const server = new ApolloServer({
       prisma
     }
   },
+  fragmentReplacements,
   playground: {
     endpoint: '/graphql',
     settings: {
@@ -27,21 +28,19 @@ const server = new ApolloServer({
       requestDidStart(reqestContext) {
         return {
           willSendResponse(ctx) {
-            // console.log('willSendResponse');
-            // const data = ctx.response.data ? ctx.response.data : '';
-            // // console.log(Object.keys(data));
-            // if (data.authGithub || data.authGoogle){
-            //   const github = data.authGithub ? true : false;
+            const data = ctx.response.data ? ctx.response.data : '';
+            if (data.authGithub || data.authGoogle){
+              const github = data.authGithub ? true : false;
               
-            //   if (github){
-            //     ctx.response.http.headers.set('authorization', data.authGithub.token);
-            //     console.log(ctx.response.http.headers);
-            //   }else{
-            //     //google
-            //     ctx.response.http.headers.set('authorization', data.authGoogle.token);
-            //     console.log(ctx.response.http.headers);
-            //   }
-            // }
+              if (github){
+                ctx.response.http.headers.set('authorization', data.authGithub.token);
+                console.log(ctx.response.http.headers);
+              }else{
+                //google
+                ctx.response.http.headers.set('authorization', data.authGoogle.token);
+                console.log(ctx.response.http.headers);
+              }
+            }
           }
 
         }

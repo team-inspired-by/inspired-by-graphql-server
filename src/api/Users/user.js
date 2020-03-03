@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { authenticateGithub, authenticateGoogle } = require('../../passport');
 const { requestGithubToken } = require('../../lib');
-const { generateToken } = require('../../utils/auth');
+const auth = require('../../utils/auth');
 const utils = require('../../utils');
 require('dotenv').config();
 
@@ -37,13 +37,11 @@ module.exports =  {
       process.env.GITHUB_CLIENT_ID
       }&scope=user`;
     },
-    test(root, args, context){
-      const { req, res } = context;
-      const result = jwt.verify("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNGMxNDAzZTk1MDk2MzhiNGY3Mzc4YyIsImV4cCI6MTU4NzM4ODYwNywiaWF0IjoxNTgyMjA0NjA3fQ.MSGF01e9MZVCyZtpqPQu1ht1rnoYtpXKIlq_n_qFXkY", 'secret');
-      console.log(result.id);
-      const testUser = User.findOne({_id: result.id});
-      console.log(testUser);
-      return "adsf";
+    test(parent, args, { req, res, prisma }, info){
+      const user = auth.getUser(req);
+      console.log(id);
+      
+      return user;
     }
 
   },
@@ -54,7 +52,9 @@ module.exports =  {
       return await User.create(input);
     },
     
-    async deleteUser(root, { id }){
+    async deleteUser(root, args, { req, res, prisma }, info){
+
+      if (auth.isManagerAuthenticated())
       return await User.findOneAndDelete(id);
     },
     async githubAccessToken(parent, { code }, context) {
@@ -93,7 +93,7 @@ module.exports =  {
               }
             });
           };
-          const token = await generateToken(user.id);
+          const token = await auth.generateToken(user.id);
           return({
             token: token,
             user: user
@@ -136,7 +136,7 @@ module.exports =  {
               }
             });
           };
-          const token = await generateToken(user.id);
+          const token = await auth.generateToken(user.id);
           return({
             token: token,
             user: user

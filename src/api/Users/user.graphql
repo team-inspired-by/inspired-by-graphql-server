@@ -32,7 +32,7 @@ type Query {
   users(data: SocialUserInput): [User!]!
   user(id: ID!): User
   githubLoginUrl: String
-  test: String
+  test: User
 }
 type AuthToken {
   token: String!
