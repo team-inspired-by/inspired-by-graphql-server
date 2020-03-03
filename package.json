@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon ./src/index.js",
-    "get-schema": "graphql get-schema -p prisma"
+    "schema": "graphql get-schema -p prisma"
   },
   "keywords": [],
   "author": "",

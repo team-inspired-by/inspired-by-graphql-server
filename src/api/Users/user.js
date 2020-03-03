@@ -88,7 +88,7 @@ module.exports =  {
                 profileImg: profile._json.picture,
                 openId: profile.id,
                 userType: 'GOOGLE',
-                token: accessToken,
+                accessToken: accessToken,
                 email: profile.emails[0].value,
               }
             });
@@ -131,7 +131,7 @@ module.exports =  {
                 profileImg: profile._json.avatar_url,
                 openId: profile.id.toString(),
                 userType: 'GITHUB',
-                token: accessToken,
+                accessToken: accessToken,
                 email: profile.emails[0].value,
               }
             });

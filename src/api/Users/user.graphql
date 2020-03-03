@@ -1,7 +1,7 @@
 type User {
   id: ID!
   openId: String
-  token: String!
+  accessToken: String!
   userType: UserType!
   email: String!
   name: String

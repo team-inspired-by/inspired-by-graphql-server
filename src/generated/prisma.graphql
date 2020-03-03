@@ -1,5 +1,5 @@
 # source: http://localhost:4466/inspiredby/dev
-# timestamp: Mon Mar 02 2020 21:18:06 GMT+0900 (GMT+09:00)
+# timestamp: Tue Mar 03 2020 18:53:01 GMT+0900 (GMT+09:00)
 
 type AggregateBookPost {
   count: Int!
@@ -4966,7 +4966,7 @@ input TopicWhereUniqueInput {
 type User implements Node {
   id: ID!
   openId: String!
-  token: String
+  accessToken: String
   userType: UserType!
   email: String!
   name: String
@@ -4994,7 +4994,7 @@ type UserConnection {
 input UserCreateInput {
   id: ID
   openId: String!
-  token: String
+  accessToken: String
   userType: UserType!
   email: String!
   name: String
@@ -5025,7 +5025,7 @@ input UserCreateOneWithoutPostsInput {
 input UserCreateWithoutCommentsInput {
   id: ID
   openId: String!
-  token: String
+  accessToken: String
   userType: UserType!
   email: String!
   name: String
@@ -5040,7 +5040,7 @@ input UserCreateWithoutCommentsInput {
 input UserCreateWithoutPostsInput {
   id: ID
   openId: String!
-  token: String
+  accessToken: String
   userType: UserType!
   email: String!
   name: String
@@ -5066,8 +5066,8 @@ enum UserOrderByInput {
   id_DESC
   openId_ASC
   openId_DESC
-  token_ASC
-  token_DESC
+  accessToken_ASC
+  accessToken_DESC
   userType_ASC
   userType_DESC
   email_ASC
@@ -5093,7 +5093,7 @@ enum UserOrderByInput {
 type UserPreviousValues {
   id: ID!
   openId: String!
-  token: String
+  accessToken: String
   userType: UserType!
   email: String!
   name: String
@@ -5150,7 +5150,7 @@ enum UserType {
 
 input UserUpdateDataInput {
   openId: String
-  token: String
+  accessToken: String
   userType: UserType
   email: String
   name: String
@@ -5165,7 +5165,7 @@ input UserUpdateDataInput {
 
 input UserUpdateInput {
   openId: String
-  token: String
+  accessToken: String
   userType: UserType
   email: String
   name: String
@@ -5180,7 +5180,7 @@ input UserUpdateInput {
 
 input UserUpdateManyMutationInput {
   openId: String
-  token: String
+  accessToken: String
   userType: UserType
   email: String
   name: String
@@ -5214,7 +5214,7 @@ input UserUpdateOneRequiredWithoutPostsInput {
 
 input UserUpdateWithoutCommentsDataInput {
   openId: String
-  token: String
+  accessToken: String
   userType: UserType
   email: String
   name: String
@@ -5228,7 +5228,7 @@ input UserUpdateWithoutCommentsDataInput {
 
 input UserUpdateWithoutPostsDataInput {
   openId: String
-  token: String
+  accessToken: String
   userType: UserType
   email: String
   name: String
@@ -5344,46 +5344,46 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   openId_not_ends_with: String
-  token: String
+  accessToken: String
 
   """All values that are not equal to given value."""
-  token_not: String
+  accessToken_not: String
 
   """All values that are contained in given list."""
-  token_in: [String!]
+  accessToken_in: [String!]
 
   """All values that are not contained in given list."""
-  token_not_in: [String!]
+  accessToken_not_in: [String!]
 
   """All values less than the given value."""
-  token_lt: String
+  accessToken_lt: String
 
   """All values less than or equal the given value."""
-  token_lte: String
+  accessToken_lte: String
 
   """All values greater than the given value."""
-  token_gt: String
+  accessToken_gt: String
 
   """All values greater than or equal the given value."""
-  token_gte: String
+  accessToken_gte: String
 
   """All values containing the given string."""
-  token_contains: String
+  accessToken_contains: String
 
   """All values not containing the given string."""
-  token_not_contains: String
+  accessToken_not_contains: String
 
   """All values starting with the given string."""
-  token_starts_with: String
+  accessToken_starts_with: String
 
   """All values not starting with the given string."""
-  token_not_starts_with: String
+  accessToken_not_starts_with: String
 
   """All values ending with the given string."""
-  token_ends_with: String
+  accessToken_ends_with: String
 
   """All values not ending with the given string."""
-  token_not_ends_with: String
+  accessToken_not_ends_with: String
   userType: UserType
 
   """All values that are not equal to given value."""
