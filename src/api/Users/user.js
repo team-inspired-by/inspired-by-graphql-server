@@ -53,9 +53,15 @@ module.exports =  {
     },
     
     async deleteUser(root, args, { req, res, prisma }, info){
-
-      if (auth.isManagerAuthenticated())
-      return await User.findOneAndDelete(id);
+      const user = auth.getUser(req);
+      const deletedUserId = args.id;
+      if (auth.isManagerAuthenticated(user) || deletedUserId == user.id){
+        return prisma.mutation.deleteUser({
+          where: {
+            id: deletedUserId
+          }
+        })
+      };
     },
     async githubAccessToken(parent, { code }, context) {
       const { req, res } = context;
