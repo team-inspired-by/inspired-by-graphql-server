@@ -12,12 +12,12 @@ module.exports = {
       exp: parseInt(expirationDate.getTime() / 1000, 10),
     }, "mysecret");
   },
-  getUser: (request, requireAuth = true) => {
+  getUser: async (request, requireAuth = true) => {
     const header = request ? request.headers.authorization : connection.context.Authorization;
     if (header) {
       const token = header.replace('Barer ', '');
       const decoded = jwt.verify(token, 'mysecret');
-      const user = prisma.query.user({
+      const user = await prisma.query.user({
         where: {
           id: decoded.id
         }

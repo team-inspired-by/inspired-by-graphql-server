@@ -1,8 +1,6 @@
-const jwt = require('jsonwebtoken');
 const { authenticateGithub, authenticateGoogle } = require('../../passport');
 const { requestGithubToken } = require('../../lib');
 const auth = require('../../utils/auth');
-const utils = require('../../utils');
 require('dotenv').config();
 
 module.exports =  {
@@ -39,29 +37,38 @@ module.exports =  {
     },
     test(parent, args, { req, res, prisma }, info){
       const user = auth.getUser(req);
-      console.log(id);
-      
       return user;
     }
 
   },
   Mutation: {
-    async createUser(root, args, { prisma }, info){
-      
-      
-      return await User.create(input);
+    async updateUser(root, args, { req, res, prisma }, info){
+      const user = await auth.getUser(req);
+      const updatedUserId = args.id;
+      const data = args.input;
+      if (auth.isManagerAuthenticated(user) || updatedUserId == user.id){
+        return prisma.mutation.updateUser({
+          where: {
+            id: updatedUserId
+          },
+          data: {
+            ...data
+          }
+        }, info);
+      };
+      throw new Error("Authentication Error");
     },
-    
     async deleteUser(root, args, { req, res, prisma }, info){
-      const user = auth.getUser(req);
+      const user = await auth.getUser(req);
       const deletedUserId = args.id;
       if (auth.isManagerAuthenticated(user) || deletedUserId == user.id){
         return prisma.mutation.deleteUser({
           where: {
             id: deletedUserId
           }
-        })
+        }, info);
       };
+      throw new Error("Authentication Error");
     },
     async githubAccessToken(parent, { code }, context) {
       const { req, res } = context;
@@ -147,7 +154,6 @@ module.exports =  {
             token: token,
             user: user
           });
-
         };
         if (resultInfo) {
           return resultInfo;

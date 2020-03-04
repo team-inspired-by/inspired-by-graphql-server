@@ -11,6 +11,7 @@ type User {
   isHeavyUser: Boolean! @default(value: false)
   level: levelType! 
   posts: [Post!]! @relation(name: "PostOnwer")
+  contributor: Contributor @relation(name: "ContributorToUser")
   comments: [Comment!]! @relation(name: "CommentAuthor", onDelete: CASCADE)
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
@@ -23,8 +24,8 @@ type Post {
   owner: User! @relation(name: "PostOnwer", onDelete:SET_NULL)
   topics: [Topic!]! @relation(name: "PostTopic")
   comments: [Comment!]! @relation(name: "Comments", onDelete: CASCADE)
-  gitPosts: GitPost! @relation(name: "GitPostToPost", onDelete: CASCADE, link: INLINE)
-  bookPosts: BookPost! @relation(name: "BookPostToPost", onDelete: CASCADE, link: INLINE)
+  gitPosts: GitPost @relation(name: "GitPostToPost", onDelete: CASCADE, link: INLINE)
+  bookPosts: BookPost @relation(name: "BookPostToPost", onDelete: CASCADE, link: INLINE)
   series: Series @relation(name: "SeriesPosts")
   contents: String!
   keywords: [String] @scalarList(strategy: RELATION) 
@@ -36,6 +37,13 @@ type Post {
   publishedAt: DateTime @publishedAt
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
+}
+type Contributor {
+  id: ID! @id
+  user: User! @relation(name: "ContributorToUser", link: INLINE)
+  type: String!
+  contributedAt: DateTime! @contributedAt
+  correctionRange: String
 }
 
 type GitPost {
@@ -53,18 +61,12 @@ type BookPost {
   post: Post! @relation(name: "BookPostToPost", onDelete: CASCADE)
   bookName: String!
   bookPublisher: String!
-  LinkedStore: [LinkedStore] @scalarList(strategy: RELATION)
+  LinkedStore: String!
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }
 
-type Contributor {
-  id: ID! @id
-  user: User!
-  type: [ContributorType!]! @scalarList(strategy: RELATION)
-  contributedAt: DateTime! @contributedAt
-  correctionRange: String
-}
+
 
 type Series {
   id: ID! @id
@@ -89,7 +91,7 @@ type Comment {
 }
 type Topic {
   id: ID! @id
-  name: String!
+  name: String! @unique
   posts: [Post] @relation(name: "PostTopic", onDelete: CASCADE)
   events: [Event] @relation(name: "TopicEvents", onDelete: CASCADE)
   coverImg: String

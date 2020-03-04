@@ -9,9 +9,20 @@ type User {
   profileImg: String
   initialLetter: String
   isHeavyUser: Boolean!
-  level: [levelType]
+  level: levelType
   posts: [Post!]!
   comments: [Comment!]!
+}
+type Mutation {
+  """유저의 기본 정보만 업데이트(level, login 관련 정보는 불가)"""
+  updateUser(id: ID!, input: UserInput): User
+  """특정 유저 삭제"""
+  deleteUser(id: ID!): User
+  githubAccessToken(code: String!): AuthToken!
+  """깃허브 로그인 & 최초 로그인 시 자동으로 회원가입"""
+  authGithub(input: AuthInput!): AuthResponse
+  """구글 로그인 & 최초 로그인 시 자동으로 회원가입"""
+  authGoogle(input: AuthInput!): AuthResponse 
 }
 enum UserType{
   GITHUB,
@@ -23,10 +34,7 @@ enum levelType{
   WRITER,
   MANAGER
 }
-input SocialUserInput {
-  userType: UserType!
-  openId: String!
-}
+
 type Query {
   """ userType && openId값이 일치하는(옵션) 유저의 전체 정보 요청"""
   users(data: SocialUserInput): [User!]!
@@ -44,12 +52,15 @@ type AuthResponse {
 input AuthInput {
   accessToken: String!
 }
-type Mutation {
-  createUser(query: String!): User
-  # updateUser(id: ID!, input: UserInput): User
-  deleteUser(id: ID!): User
-  githubAccessToken(code: String!): AuthToken!
-  authGithub(input: AuthInput!): AuthResponse
-  authGoogle(input: AuthInput!): AuthResponse
-    
+
+input UserInput {
+  name: String
+  alias: String
+  profileImg: String
+  initialLetter: String
+  isHeavyUser: Boolean
+}
+input SocialUserInput {
+  userType: UserType!
+  openId: String!
 }

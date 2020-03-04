@@ -47,7 +47,7 @@ type BookPost {
   post: Post!
   bookName: String!
   bookPublisher: String!
-  LinkedStore: [LinkedStore!]!
+  LinkedStore: String!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -63,11 +63,7 @@ input BookPostCreateInput {
   post: PostCreateOneWithoutBookPostsInput!
   bookName: String!
   bookPublisher: String!
-  LinkedStore: BookPostCreateLinkedStoreInput
-}
-
-input BookPostCreateLinkedStoreInput {
-  set: [LinkedStore!]
+  LinkedStore: String!
 }
 
 input BookPostCreateOneWithoutPostInput {
@@ -79,7 +75,7 @@ input BookPostCreateWithoutPostInput {
   id: ID
   bookName: String!
   bookPublisher: String!
-  LinkedStore: BookPostCreateLinkedStoreInput
+  LinkedStore: String!
 }
 
 type BookPostEdge {
@@ -94,6 +90,8 @@ enum BookPostOrderByInput {
   bookName_DESC
   bookPublisher_ASC
   bookPublisher_DESC
+  LinkedStore_ASC
+  LinkedStore_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -104,7 +102,7 @@ type BookPostPreviousValues {
   id: ID!
   bookName: String!
   bookPublisher: String!
-  LinkedStore: [LinkedStore!]!
+  LinkedStore: String!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -131,30 +129,28 @@ input BookPostUpdateInput {
   post: PostUpdateOneRequiredWithoutBookPostsInput
   bookName: String
   bookPublisher: String
-  LinkedStore: BookPostUpdateLinkedStoreInput
-}
-
-input BookPostUpdateLinkedStoreInput {
-  set: [LinkedStore!]
+  LinkedStore: String
 }
 
 input BookPostUpdateManyMutationInput {
   bookName: String
   bookPublisher: String
-  LinkedStore: BookPostUpdateLinkedStoreInput
+  LinkedStore: String
 }
 
-input BookPostUpdateOneRequiredWithoutPostInput {
+input BookPostUpdateOneWithoutPostInput {
   create: BookPostCreateWithoutPostInput
   update: BookPostUpdateWithoutPostDataInput
   upsert: BookPostUpsertWithoutPostInput
+  delete: Boolean
+  disconnect: Boolean
   connect: BookPostWhereUniqueInput
 }
 
 input BookPostUpdateWithoutPostDataInput {
   bookName: String
   bookPublisher: String
-  LinkedStore: BookPostUpdateLinkedStoreInput
+  LinkedStore: String
 }
 
 input BookPostUpsertWithoutPostInput {
@@ -206,6 +202,20 @@ input BookPostWhereInput {
   bookPublisher_not_starts_with: String
   bookPublisher_ends_with: String
   bookPublisher_not_ends_with: String
+  LinkedStore: String
+  LinkedStore_not: String
+  LinkedStore_in: [String!]
+  LinkedStore_not_in: [String!]
+  LinkedStore_lt: String
+  LinkedStore_lte: String
+  LinkedStore_gt: String
+  LinkedStore_gte: String
+  LinkedStore_contains: String
+  LinkedStore_not_contains: String
+  LinkedStore_starts_with: String
+  LinkedStore_not_starts_with: String
+  LinkedStore_ends_with: String
+  LinkedStore_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -587,7 +597,7 @@ input CommentWhereUniqueInput {
 type Contributor {
   id: ID!
   user: User!
-  type: [ContributorType!]!
+  type: String!
   contributedAt: DateTime!
   correctionRange: String
 }
@@ -600,14 +610,22 @@ type ContributorConnection {
 
 input ContributorCreateInput {
   id: ID
-  user: UserCreateOneInput!
-  type: ContributorCreatetypeInput
+  user: UserCreateOneWithoutContributorInput!
+  type: String!
   contributedAt: DateTime!
   correctionRange: String
 }
 
-input ContributorCreatetypeInput {
-  set: [ContributorType!]
+input ContributorCreateOneWithoutUserInput {
+  create: ContributorCreateWithoutUserInput
+  connect: ContributorWhereUniqueInput
+}
+
+input ContributorCreateWithoutUserInput {
+  id: ID
+  type: String!
+  contributedAt: DateTime!
+  correctionRange: String
 }
 
 type ContributorEdge {
@@ -618,6 +636,8 @@ type ContributorEdge {
 enum ContributorOrderByInput {
   id_ASC
   id_DESC
+  type_ASC
+  type_DESC
   contributedAt_ASC
   contributedAt_DESC
   correctionRange_ASC
@@ -626,7 +646,7 @@ enum ContributorOrderByInput {
 
 type ContributorPreviousValues {
   id: ID!
-  type: [ContributorType!]!
+  type: String!
   contributedAt: DateTime!
   correctionRange: String
 }
@@ -649,27 +669,37 @@ input ContributorSubscriptionWhereInput {
   NOT: [ContributorSubscriptionWhereInput!]
 }
 
-enum ContributorType {
-  TYPO
-  INFO_CORRECTION
-  INFO_ADDTION
-}
-
 input ContributorUpdateInput {
-  user: UserUpdateOneRequiredInput
-  type: ContributorUpdatetypeInput
+  user: UserUpdateOneRequiredWithoutContributorInput
+  type: String
   contributedAt: DateTime
   correctionRange: String
 }
 
 input ContributorUpdateManyMutationInput {
-  type: ContributorUpdatetypeInput
+  type: String
   contributedAt: DateTime
   correctionRange: String
 }
 
-input ContributorUpdatetypeInput {
-  set: [ContributorType!]
+input ContributorUpdateOneWithoutUserInput {
+  create: ContributorCreateWithoutUserInput
+  update: ContributorUpdateWithoutUserDataInput
+  upsert: ContributorUpsertWithoutUserInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: ContributorWhereUniqueInput
+}
+
+input ContributorUpdateWithoutUserDataInput {
+  type: String
+  contributedAt: DateTime
+  correctionRange: String
+}
+
+input ContributorUpsertWithoutUserInput {
+  update: ContributorUpdateWithoutUserDataInput!
+  create: ContributorCreateWithoutUserInput!
 }
 
 input ContributorWhereInput {
@@ -688,6 +718,20 @@ input ContributorWhereInput {
   id_ends_with: ID
   id_not_ends_with: ID
   user: UserWhereInput
+  type: String
+  type_not: String
+  type_in: [String!]
+  type_not_in: [String!]
+  type_lt: String
+  type_lte: String
+  type_gt: String
+  type_gte: String
+  type_contains: String
+  type_not_contains: String
+  type_starts_with: String
+  type_not_starts_with: String
+  type_ends_with: String
+  type_not_ends_with: String
   contributedAt: DateTime
   contributedAt_not: DateTime
   contributedAt_in: [DateTime!]
@@ -1285,10 +1329,12 @@ input GitPostUpdateManyMutationInput {
   gitTitle: String
 }
 
-input GitPostUpdateOneRequiredWithoutPostInput {
+input GitPostUpdateOneWithoutPostInput {
   create: GitPostCreateWithoutPostInput
   update: GitPostUpdateWithoutPostDataInput
   upsert: GitPostUpsertWithoutPostInput
+  delete: Boolean
+  disconnect: Boolean
   connect: GitPostWhereUniqueInput
 }
 
@@ -1377,11 +1423,6 @@ enum levelType {
   MEMBER
   WRITER
   MANAGER
-}
-
-enum LinkedStore {
-  YES24
-  KYOBO
 }
 
 scalar Long
@@ -1473,8 +1514,8 @@ type Post {
   owner: User!
   topics(where: TopicWhereInput, orderBy: TopicOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Topic!]
   comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
-  gitPosts: GitPost!
-  bookPosts: BookPost!
+  gitPosts: GitPost
+  bookPosts: BookPost
   series: Series
   contents: String!
   keywords: [String!]!
@@ -1501,8 +1542,8 @@ input PostCreateInput {
   owner: UserCreateOneWithoutPostsInput!
   topics: TopicCreateManyWithoutPostsInput
   comments: CommentCreateManyWithoutPostInput
-  gitPosts: GitPostCreateOneWithoutPostInput!
-  bookPosts: BookPostCreateOneWithoutPostInput!
+  gitPosts: GitPostCreateOneWithoutPostInput
+  bookPosts: BookPostCreateOneWithoutPostInput
   series: SeriesCreateOneWithoutPostsInput
   contents: String!
   keywords: PostCreatekeywordsInput
@@ -1559,7 +1600,7 @@ input PostCreateWithoutBookPostsInput {
   owner: UserCreateOneWithoutPostsInput!
   topics: TopicCreateManyWithoutPostsInput
   comments: CommentCreateManyWithoutPostInput
-  gitPosts: GitPostCreateOneWithoutPostInput!
+  gitPosts: GitPostCreateOneWithoutPostInput
   series: SeriesCreateOneWithoutPostsInput
   contents: String!
   keywords: PostCreatekeywordsInput
@@ -1577,8 +1618,8 @@ input PostCreateWithoutCommentsInput {
   coverImg: String
   owner: UserCreateOneWithoutPostsInput!
   topics: TopicCreateManyWithoutPostsInput
-  gitPosts: GitPostCreateOneWithoutPostInput!
-  bookPosts: BookPostCreateOneWithoutPostInput!
+  gitPosts: GitPostCreateOneWithoutPostInput
+  bookPosts: BookPostCreateOneWithoutPostInput
   series: SeriesCreateOneWithoutPostsInput
   contents: String!
   keywords: PostCreatekeywordsInput
@@ -1597,7 +1638,7 @@ input PostCreateWithoutGitPostsInput {
   owner: UserCreateOneWithoutPostsInput!
   topics: TopicCreateManyWithoutPostsInput
   comments: CommentCreateManyWithoutPostInput
-  bookPosts: BookPostCreateOneWithoutPostInput!
+  bookPosts: BookPostCreateOneWithoutPostInput
   series: SeriesCreateOneWithoutPostsInput
   contents: String!
   keywords: PostCreatekeywordsInput
@@ -1615,8 +1656,8 @@ input PostCreateWithoutOwnerInput {
   coverImg: String
   topics: TopicCreateManyWithoutPostsInput
   comments: CommentCreateManyWithoutPostInput
-  gitPosts: GitPostCreateOneWithoutPostInput!
-  bookPosts: BookPostCreateOneWithoutPostInput!
+  gitPosts: GitPostCreateOneWithoutPostInput
+  bookPosts: BookPostCreateOneWithoutPostInput
   series: SeriesCreateOneWithoutPostsInput
   contents: String!
   keywords: PostCreatekeywordsInput
@@ -1635,8 +1676,8 @@ input PostCreateWithoutSeriesInput {
   owner: UserCreateOneWithoutPostsInput!
   topics: TopicCreateManyWithoutPostsInput
   comments: CommentCreateManyWithoutPostInput
-  gitPosts: GitPostCreateOneWithoutPostInput!
-  bookPosts: BookPostCreateOneWithoutPostInput!
+  gitPosts: GitPostCreateOneWithoutPostInput
+  bookPosts: BookPostCreateOneWithoutPostInput
   contents: String!
   keywords: PostCreatekeywordsInput
   summary: PostCreatesummaryInput
@@ -1653,8 +1694,8 @@ input PostCreateWithoutTopicsInput {
   coverImg: String
   owner: UserCreateOneWithoutPostsInput!
   comments: CommentCreateManyWithoutPostInput
-  gitPosts: GitPostCreateOneWithoutPostInput!
-  bookPosts: BookPostCreateOneWithoutPostInput!
+  gitPosts: GitPostCreateOneWithoutPostInput
+  bookPosts: BookPostCreateOneWithoutPostInput
   series: SeriesCreateOneWithoutPostsInput
   contents: String!
   keywords: PostCreatekeywordsInput
@@ -1838,8 +1879,8 @@ input PostUpdateInput {
   owner: UserUpdateOneRequiredWithoutPostsInput
   topics: TopicUpdateManyWithoutPostsInput
   comments: CommentUpdateManyWithoutPostInput
-  gitPosts: GitPostUpdateOneRequiredWithoutPostInput
-  bookPosts: BookPostUpdateOneRequiredWithoutPostInput
+  gitPosts: GitPostUpdateOneWithoutPostInput
+  bookPosts: BookPostUpdateOneWithoutPostInput
   series: SeriesUpdateOneWithoutPostsInput
   contents: String
   keywords: PostUpdatekeywordsInput
@@ -1953,7 +1994,7 @@ input PostUpdateWithoutBookPostsDataInput {
   owner: UserUpdateOneRequiredWithoutPostsInput
   topics: TopicUpdateManyWithoutPostsInput
   comments: CommentUpdateManyWithoutPostInput
-  gitPosts: GitPostUpdateOneRequiredWithoutPostInput
+  gitPosts: GitPostUpdateOneWithoutPostInput
   series: SeriesUpdateOneWithoutPostsInput
   contents: String
   keywords: PostUpdatekeywordsInput
@@ -1970,8 +2011,8 @@ input PostUpdateWithoutCommentsDataInput {
   coverImg: String
   owner: UserUpdateOneRequiredWithoutPostsInput
   topics: TopicUpdateManyWithoutPostsInput
-  gitPosts: GitPostUpdateOneRequiredWithoutPostInput
-  bookPosts: BookPostUpdateOneRequiredWithoutPostInput
+  gitPosts: GitPostUpdateOneWithoutPostInput
+  bookPosts: BookPostUpdateOneWithoutPostInput
   series: SeriesUpdateOneWithoutPostsInput
   contents: String
   keywords: PostUpdatekeywordsInput
@@ -1989,7 +2030,7 @@ input PostUpdateWithoutGitPostsDataInput {
   owner: UserUpdateOneRequiredWithoutPostsInput
   topics: TopicUpdateManyWithoutPostsInput
   comments: CommentUpdateManyWithoutPostInput
-  bookPosts: BookPostUpdateOneRequiredWithoutPostInput
+  bookPosts: BookPostUpdateOneWithoutPostInput
   series: SeriesUpdateOneWithoutPostsInput
   contents: String
   keywords: PostUpdatekeywordsInput
@@ -2006,8 +2047,8 @@ input PostUpdateWithoutOwnerDataInput {
   coverImg: String
   topics: TopicUpdateManyWithoutPostsInput
   comments: CommentUpdateManyWithoutPostInput
-  gitPosts: GitPostUpdateOneRequiredWithoutPostInput
-  bookPosts: BookPostUpdateOneRequiredWithoutPostInput
+  gitPosts: GitPostUpdateOneWithoutPostInput
+  bookPosts: BookPostUpdateOneWithoutPostInput
   series: SeriesUpdateOneWithoutPostsInput
   contents: String
   keywords: PostUpdatekeywordsInput
@@ -2025,8 +2066,8 @@ input PostUpdateWithoutSeriesDataInput {
   owner: UserUpdateOneRequiredWithoutPostsInput
   topics: TopicUpdateManyWithoutPostsInput
   comments: CommentUpdateManyWithoutPostInput
-  gitPosts: GitPostUpdateOneRequiredWithoutPostInput
-  bookPosts: BookPostUpdateOneRequiredWithoutPostInput
+  gitPosts: GitPostUpdateOneWithoutPostInput
+  bookPosts: BookPostUpdateOneWithoutPostInput
   contents: String
   keywords: PostUpdatekeywordsInput
   summary: PostUpdatesummaryInput
@@ -2042,8 +2083,8 @@ input PostUpdateWithoutTopicsDataInput {
   coverImg: String
   owner: UserUpdateOneRequiredWithoutPostsInput
   comments: CommentUpdateManyWithoutPostInput
-  gitPosts: GitPostUpdateOneRequiredWithoutPostInput
-  bookPosts: BookPostUpdateOneRequiredWithoutPostInput
+  gitPosts: GitPostUpdateOneWithoutPostInput
+  bookPosts: BookPostUpdateOneWithoutPostInput
   series: SeriesUpdateOneWithoutPostsInput
   contents: String
   keywords: PostUpdatekeywordsInput
@@ -2923,6 +2964,7 @@ input TopicWhereInput {
 
 input TopicWhereUniqueInput {
   id: ID
+  name: String
 }
 
 type User {
@@ -2938,6 +2980,7 @@ type User {
   isHeavyUser: Boolean!
   level: levelType!
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
+  contributor: Contributor
   comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -2962,6 +3005,7 @@ input UserCreateInput {
   isHeavyUser: Boolean
   level: levelType!
   posts: PostCreateManyWithoutOwnerInput
+  contributor: ContributorCreateOneWithoutUserInput
   comments: CommentCreateManyWithoutAuthorInput
 }
 
@@ -2972,6 +3016,11 @@ input UserCreateOneInput {
 
 input UserCreateOneWithoutCommentsInput {
   create: UserCreateWithoutCommentsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutContributorInput {
+  create: UserCreateWithoutContributorInput
   connect: UserWhereUniqueInput
 }
 
@@ -2993,6 +3042,23 @@ input UserCreateWithoutCommentsInput {
   isHeavyUser: Boolean
   level: levelType!
   posts: PostCreateManyWithoutOwnerInput
+  contributor: ContributorCreateOneWithoutUserInput
+}
+
+input UserCreateWithoutContributorInput {
+  id: ID
+  openId: String!
+  accessToken: String
+  userType: UserType!
+  email: String!
+  name: String
+  alias: String
+  profileImg: String
+  initialLetter: String
+  isHeavyUser: Boolean
+  level: levelType!
+  posts: PostCreateManyWithoutOwnerInput
+  comments: CommentCreateManyWithoutAuthorInput
 }
 
 input UserCreateWithoutPostsInput {
@@ -3007,6 +3073,7 @@ input UserCreateWithoutPostsInput {
   initialLetter: String
   isHeavyUser: Boolean
   level: levelType!
+  contributor: ContributorCreateOneWithoutUserInput
   comments: CommentCreateManyWithoutAuthorInput
 }
 
@@ -3095,6 +3162,7 @@ input UserUpdateDataInput {
   isHeavyUser: Boolean
   level: levelType
   posts: PostUpdateManyWithoutOwnerInput
+  contributor: ContributorUpdateOneWithoutUserInput
   comments: CommentUpdateManyWithoutAuthorInput
 }
 
@@ -3110,6 +3178,7 @@ input UserUpdateInput {
   isHeavyUser: Boolean
   level: levelType
   posts: PostUpdateManyWithoutOwnerInput
+  contributor: ContributorUpdateOneWithoutUserInput
   comments: CommentUpdateManyWithoutAuthorInput
 }
 
@@ -3140,6 +3209,13 @@ input UserUpdateOneRequiredWithoutCommentsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneRequiredWithoutContributorInput {
+  create: UserCreateWithoutContributorInput
+  update: UserUpdateWithoutContributorDataInput
+  upsert: UserUpsertWithoutContributorInput
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateOneRequiredWithoutPostsInput {
   create: UserCreateWithoutPostsInput
   update: UserUpdateWithoutPostsDataInput
@@ -3159,6 +3235,22 @@ input UserUpdateWithoutCommentsDataInput {
   isHeavyUser: Boolean
   level: levelType
   posts: PostUpdateManyWithoutOwnerInput
+  contributor: ContributorUpdateOneWithoutUserInput
+}
+
+input UserUpdateWithoutContributorDataInput {
+  openId: String
+  accessToken: String
+  userType: UserType
+  email: String
+  name: String
+  alias: String
+  profileImg: String
+  initialLetter: String
+  isHeavyUser: Boolean
+  level: levelType
+  posts: PostUpdateManyWithoutOwnerInput
+  comments: CommentUpdateManyWithoutAuthorInput
 }
 
 input UserUpdateWithoutPostsDataInput {
@@ -3172,6 +3264,7 @@ input UserUpdateWithoutPostsDataInput {
   initialLetter: String
   isHeavyUser: Boolean
   level: levelType
+  contributor: ContributorUpdateOneWithoutUserInput
   comments: CommentUpdateManyWithoutAuthorInput
 }
 
@@ -3183,6 +3276,11 @@ input UserUpsertNestedInput {
 input UserUpsertWithoutCommentsInput {
   update: UserUpdateWithoutCommentsDataInput!
   create: UserCreateWithoutCommentsInput!
+}
+
+input UserUpsertWithoutContributorInput {
+  update: UserUpdateWithoutContributorDataInput!
+  create: UserCreateWithoutContributorInput!
 }
 
 input UserUpsertWithoutPostsInput {
@@ -3316,6 +3414,7 @@ input UserWhereInput {
   posts_every: PostWhereInput
   posts_some: PostWhereInput
   posts_none: PostWhereInput
+  contributor: ContributorWhereInput
   comments_every: CommentWhereInput
   comments_some: CommentWhereInput
   comments_none: CommentWhereInput
