@@ -1,4 +1,4 @@
-const { Prisma } = require('prisma-binding');
+import { Prisma } from 'prisma-binding';
 // const { fragmentReplacements } = require('./')
 
 const prisma = new Prisma({
@@ -6,4 +6,4 @@ const prisma = new Prisma({
     endpoint: 'http://localhost:4466/inspiredby/dev',
 });
 
-module.exports = prisma;
+export default prisma;

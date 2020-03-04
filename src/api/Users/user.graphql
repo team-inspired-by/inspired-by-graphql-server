@@ -1,3 +1,5 @@
+#  import { UserOrderByInput, PostOrderByInput, CommentOrderByInput } from '../../generated/prisma.graphql'
+ 
 type User {
   id: ID!
   openId: String
@@ -11,11 +13,12 @@ type User {
   isHeavyUser: Boolean!
   level: levelType
   posts: [Post!]!
-  comments: [Comment!]!
+  # comments: [Comment!]!
 }
 type Query {
   """ userType && openId값이 일치하는(옵션) 유저의 전체 정보 요청"""
-  users(data: SocialUserInput): [User!]!
+  
+  users(data: SocialUserInput, first: Int, skip: Int, after: String): [User!]!
   """id값과 일치하는 유저 반환"""
   user(id: ID!): User
   githubLoginUrl: String
@@ -51,6 +54,7 @@ type AuthResponse {
   token: String
   user: User!
 }
+
 input AuthInput {
   accessToken: String!
 }

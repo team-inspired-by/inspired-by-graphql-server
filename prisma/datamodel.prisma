@@ -11,7 +11,7 @@ type User {
   isHeavyUser: Boolean! @default(value: false)
   level: levelType! 
   posts: [Post!]! @relation(name: "PostOnwer")
-  contributor: Contributor @relation(name: "ContributorToUser")
+  contributor: Contributor @relation(name: "ContributorToUser", onDelete: SET_NULL)
   comments: [Comment!]! @relation(name: "CommentAuthor", onDelete: CASCADE)
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
@@ -40,7 +40,7 @@ type Post {
 }
 type Contributor {
   id: ID! @id
-  user: User! @relation(name: "ContributorToUser", link: INLINE)
+  user: User! @relation(name: "ContributorToUser", link: INLINE, onDelete: CASCADE)
   type: String!
   contributedAt: DateTime! @contributedAt
   correctionRange: String

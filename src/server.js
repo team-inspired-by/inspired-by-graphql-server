@@ -1,12 +1,13 @@
-const { ApolloServer, PubSub, AuthenticationError } = require('apollo-server');
-const prisma = require('./prisma'); 
-const { extractFragmentReplacements } = require('prisma-binding');
-const { typeDefs, resolvers } = require('./schema');
+import prisma from './prisma'; 
+// const { ApolloServer, PubSub, AuthenticationError } = require('apollo-server');
+import { GraphQLServer, PubSub, AuthenticationError } from 'graphql-yoga';
+import { extractFragmentReplacements } from 'prisma-binding';
+import { typeDefs, resolvers } from './schema';
 const fragmentReplacements = extractFragmentReplacements(resolvers);
 const pubsub = new PubSub();
 const port = process.env.PORT || 4000;
 
-const server = new ApolloServer({
+const server = new GraphQLServer({
   typeDefs,
   resolvers,
   context({ req, res }) {
@@ -50,10 +51,13 @@ const server = new ApolloServer({
 
 });
 
+server.start(() => {
+  console.log('The server is up!')
+})
 // server.listen(({port}) => console.log(`Server is running on http://localhost:4000`));
-server.listen({ port }).then(({ url }) => {
-  console.log(`Server ready at ${url}`)
-});
+// server.listen({ port }).then(({ url }) => {
+//   console.log(`Server ready at ${url}`)
+// });
 
 
 

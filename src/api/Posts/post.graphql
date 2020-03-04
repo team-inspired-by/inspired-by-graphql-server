@@ -6,8 +6,8 @@ type Post{
   owner: User!
   # contributor: [Contributor!]!
   contents: String!
-  topics: [Topic!]!
-  comments: [Comment]
+  # topics: [Topic!]!
+  # comments: [Comment]
   summary: [String]
   keywords: [String]
   numViews: Int!
@@ -24,10 +24,11 @@ type Query{
   getCommentsCount(postId: ID!): Int
 }
 type Mutation {
-  """포스트 생성 토픽과 유저는 필수"""
+  """포스트 생성 (토픽과 오너는 필수)"""
   createPost(input: PostInput): Post
-  # updatePost(id: ID!, input: postInput): Post
-  # deletePost(id: ID!): Post
+  """포스트의 id값과 일치하는 포스트를 업데이트"""
+  updatePost(postInfo: PostUpdateInfo!, data: PostUpdateInput): Post
+  deletePost(postInfo: PostUpdateInfo!): Post
   # incrementLike(id: ID!): Post
   # decrementLike(id: ID!): Post
 }
@@ -40,6 +41,19 @@ input PostInput {
   keywords: [String]
   summary: [String]
   isPrivate: Boolean!
+}
+input PostUpdateInput{
+  category: Category
+  coverImg: String
+  contents: String
+  topics : [String]
+  keywords: [String]
+  summary: [String]
+  isPrivate: Boolean
+}
+input PostUpdateInfo {
+  ownerId: ID!
+  postId: ID!
 }
 
 enum Category {

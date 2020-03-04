@@ -1,8 +1,9 @@
-const passport = require('passport');
-// const FacebookTokenStrategy = require('passport-facebook-token');
+import passport from 'passport';
+import dotenv from 'dotenv';
+const FacebookTokenStrategy = require('passport-facebook-token');
 const { Strategy: GoogleTokenStrategy } = require('passport-google-token');
 const GitHubTokenStrategy = require('passport-github-token');
-require('dotenv').config();
+dotenv.config();
 
 const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
 const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;

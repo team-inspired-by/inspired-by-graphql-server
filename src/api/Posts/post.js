@@ -1,7 +1,10 @@
-const auth = require('../../utils/auth');
-module.exports = {
+import auth from '../../utils/auth';
+export default {
   Query: {
-
+    async posts(root, args, { req, res, prisma }, info) {
+      return prisma.query.posts({}, info);
+    },
+    
 
   },
   Mutation: {
@@ -33,12 +36,46 @@ module.exports = {
         },
         topics: topics
       }
+      return await prisma.mutation.createPost({
+        data: inputData,  
+      }, info);
       if (auth.isManagerAuthenticated(user) || auth.isWriterAuthenticated(user)){
-        return await prisma.mutation.createPost({
-          data: inputData,  
-        }, info);
+        
       }
+      throw new Error("Authentication Error");
     },
+    async updatePost(root, args, { req, res, prisma }, info){
+      // const user = auth.getUser(req);
+      const { postInfo, data } = args;
+      console.log(postInfo)
+      console.log(data);
+      return await prisma.mutation.updatePost({
+        where: {
+          id: postInfo.postId
+        },
+        data: data
+      });
+      // if (auth.isManagerAuthenticated(user) || postInfo.ownerId == user.id){
+        
+      // };
+      throw new Error("Authentication Error");
+    },
+    async deletePost(root, args, { req, res, prisma }, info){
+      const { postInfo } = args;
+      const { ownerId, postId } = postInfo;
+      
+      return prisma.mutation.deletePost({
+        where: {
+          id: postId
+        }
+      });
+      if (auth.isManagerAuthenticated(user) || ownerId == user.id){
+        
+      }
+      throw new Error("Authentication Error");
+
+    }
+
 
     
   }

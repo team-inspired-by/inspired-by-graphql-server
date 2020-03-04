@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 const prisma = require('../prisma'); 
-const bcrypt = require('bcrypt');
 
 module.exports = {
   generateToken: (userId) => {
@@ -23,7 +22,7 @@ module.exports = {
         }
       });
       return user;
-    }
+    };
 
     if (requireAuth) {
       throw new Error('Authentication required');

@@ -1,7 +1,0 @@
-type GitPost{ 
-  id: ID!
-  post: Post!
-  gitId: String!
-  gitAuthor: [String]!
-  gitTitle: String!
-}

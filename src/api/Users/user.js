@@ -1,9 +1,10 @@
-const { authenticateGithub, authenticateGoogle } = require('../../passport');
-const { requestGithubToken } = require('../../lib');
-const auth = require('../../utils/auth');
-require('dotenv').config();
+import { authenticateGithub, authenticateGoogle } from '../../passport';
+import requestGithubToken from '../../lib'
+import auth from '../../utils/auth';
+import dotenv from 'dotenv';
+dotenv.config();
 
-module.exports =  {
+export default {
   Query: {
     async users(parent, args, { prisma }, info) {
       const opArgs = {};
@@ -46,15 +47,16 @@ module.exports =  {
       const user = await auth.getUser(req);
       const updatedUserId = args.id;
       const data = args.input;
+      return prisma.mutation.updateUser({
+        where: {
+          id: updatedUserId
+        },
+        data: {
+          ...data
+        }
+      }, info);
       if (auth.isManagerAuthenticated(user) || updatedUserId == user.id){
-        return prisma.mutation.updateUser({
-          where: {
-            id: updatedUserId
-          },
-          data: {
-            ...data
-          }
-        }, info);
+        
       };
       throw new Error("Authentication Error");
     },
