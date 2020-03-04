@@ -7,18 +7,18 @@ module.exports =  {
   Query: {
     async users(parent, args, { prisma }, info) {
       const opArgs = {};
-      const data = args.SocialUserInput;
-
-      if (args.SocialUserInput) {
+      const data = args.data;
+      if (args.data) {
         opArgs.where = {
-          AND: [{
+          OR: [{
             openId: data.openId
           },{
             userType: data.userType
+          },{
+            id: data.id
           }]
         }
       };
-      
       return prisma.query.users(opArgs, info);
     },
     async user(parent, args, { prisma }, info) {
