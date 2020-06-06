@@ -6,7 +6,7 @@
       "dev": "babel-node server.js"
    },
    "dependencies": {
-      "apollo-server": "^2.10.1",
+      "apollo-server": "^2.14.2",
       "apollo-server-express": "^2.9.16",
       "axios": "^0.19.2",
       "body-parser": "^1.18.3",
